@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		887644441B23C522008C1EDB /* Tile.m in Sources */ = {isa = PBXBuildFile; fileRef = 887644431B23C522008C1EDB /* Tile.m */; };
+		887DA7DA1B24050F00576159 /* 3x3.png in Resources */ = {isa = PBXBuildFile; fileRef = 887DA7D91B24050F00576159 /* 3x3.png */; };
 		88F412CD1B22A29300378089 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F412CC1B22A29300378089 /* main.m */; };
 		88F412D01B22A29300378089 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F412CF1B22A29300378089 /* AppDelegate.m */; };
 		88F412D31B22A29300378089 /* flash.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 88F412D11B22A29300378089 /* flash.xcdatamodeld */; };
@@ -56,6 +57,7 @@
 /* Begin PBXFileReference section */
 		887644421B23C4CF008C1EDB /* Tile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tile.h; sourceTree = "<group>"; };
 		887644431B23C522008C1EDB /* Tile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tile.m; sourceTree = "<group>"; };
+		887DA7D91B24050F00576159 /* 3x3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3x3.png; sourceTree = "<group>"; };
 		88F412C71B22A29300378089 /* flash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = flash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88F412CB1B22A29300378089 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		88F412CC1B22A29300378089 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				88F413131B22B5BF00378089 /* button_medium.png */,
+				887DA7D91B24050F00576159 /* 3x3.png */,
 				88F412CB1B22A29300378089 /* Info.plist */,
 				88F412CC1B22A29300378089 /* main.m */,
 			);
@@ -301,6 +304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				88F413141B22B5BF00378089 /* button_medium.png in Resources */,
+				887DA7DA1B24050F00576159 /* 3x3.png in Resources */,
 				88F412D91B22A29300378089 /* Main.storyboard in Resources */,
 				88F412DE1B22A29300378089 /* LaunchScreen.xib in Resources */,
 				88F412DB1B22A29300378089 /* Images.xcassets in Resources */,

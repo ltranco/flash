@@ -12,14 +12,19 @@
 @implementation Play {
     SPSprite *playScene;
     SPQuad *piece1;
-    SPSprite *piece2;
     SPImage *img;
     NSInteger xCoordinates[10];
     NSInteger yCoordinates[10];
+    NSMutableArray *board;
 }
 
 - (id)init {
     if ((self = [super init])) {
+        board = [[NSMutableArray alloc] initWithCapacity:10];
+        for(int i = 0; i < 10; i++) {
+            [board insertObject:[[NSMutableArray alloc] initWithCapacity:10] atIndex:i];
+        }
+        
         playScene = [[SPSprite alloc] init];
         
         //Titles, buttons
@@ -40,6 +45,7 @@
                 SPQuad *quad = [SPQuad quadWithWidth:tileSize height:tileSize];
                 quad.x = startX;
                 quad.y = startY;
+                board[i][j] = quad;
                 quad.color = 0xff5050;
                 [playScene addChild:quad];
                 xCoordinates[j] = startX;
@@ -53,24 +59,17 @@
         //Test tiles
         piece1 = [SPQuad quadWithWidth:tileSize height:tileSize color:0xff000];
         piece1.x = startX; piece1.y = startY + 100;
+        piece1.name = @"p1";
         [piece1 addEventListener:@selector(onTouch:) atObject:self forType:SP_EVENT_TYPE_TOUCH];
         [playScene addChild:piece1];
         
         //Test tiles2
-        piece2 = [[SPSprite alloc] init];
-        SPQuad *q1 = [SPQuad quadWithWidth:tileSize height:tileSize color:0xaabbcc];
-        SPQuad *q2 = [SPQuad quadWithWidth:tileSize height:tileSize color:0xaabbcc];
-        SPQuad *q3 = [SPQuad quadWithWidth:tileSize height:tileSize color:0xaabbcc];
-        q1.x = 300; q1.y = 300;
-        q2.x = 350; q2.y = 300;
-        q3.x = 300; q3.y = 350;
-        [piece2 addChild:q1];
-        [piece2 addChild:q2];
-        [piece2 addChild:q3];
-        //[piece2 addEventListener:@selector(onTouch:) atObject:self forType:SP_EVENT_TYPE_TOUCH];
-        //[playScene addChild:piece2];
-    
-        img = [[SPImage alloc] initWithContentsOfFile:@"button_medium.png"];
+        img = [[SPImage alloc] initWithContentsOfFile:@"3x3.png"];
+        img.width = 100;
+        img.height = 100;
+        img.x = 15;
+        
+
         [img addEventListener:@selector(onTouch:) atObject:self forType:SP_EVENT_TYPE_TOUCH];
         [playScene addChild:img];
         
@@ -83,34 +82,40 @@
 -(void) onTouch: (SPTouchEvent *) event {
     SPTouch *drag = [[event touchesWithTarget:self andPhase:SPTouchPhaseMoved] anyObject];
     SPTouch *stop = [[event touchesWithTarget:self andPhase:(SPTouchPhaseEnded)] anyObject];
-    /*
+    SPQuad *dispatcher = (SPQuad *) event.target;
+            NSLog(@"%@", dispatcher.name);
     if(stop) {
         int minDiffX = Sparrow.stage.width;
         int minDiffY = Sparrow.stage.height;
         int valX = 0;
         int valY = 0;
         for(int i = 0; i < 10; i++) {
-            if(abs(piece1.x - (int) xCoordinates[i]) < minDiffX) {
-                minDiffX = abs(piece1.x - (int) xCoordinates[i]);
+            if(abs(dispatcher.x - (int) xCoordinates[i]) < minDiffX) {
+                minDiffX = abs(dispatcher.x - (int) xCoordinates[i]);
                 valX = (int) xCoordinates[i];
             }
-            if(abs(piece1.y - (int) yCoordinates[i]) < minDiffY) {
-                minDiffY = abs(piece1.y - (int) yCoordinates[i]);
+            if(abs(dispatcher.y - (int) yCoordinates[i]) < minDiffY) {
+                minDiffY = abs(dispatcher.y - (int) yCoordinates[i]);
                 valY = (int) yCoordinates[i];
             }
         }
-        piece1.x = valX;
-        piece1.y = valY;
-    }*/
+        //dispatcher.x = valX
+        //dispatcher.y = valY;
+
+        for(int i = 0; i < 10; i++) {
+            for(int j = 0; j < 10; j++) {
+                SPQuad *tile = (SPQuad *) board[i][j];
+                if(tile.x == valX && tile.y == valY) {
+                    tile.color = 0x0;
+                }
+            }
+        }
+    }
     
     if (drag) {
         SPPoint *dragLocation = [drag locationInSpace:self];
-        /*piece2.x = dragLocation.x;
-        piece2.y = dragLocation.y;
-        NSLog(@"%f %f", piece2.x, piece2.y);*/
-        SPQuad *test = (SPQuad *) event.target;
-        test.x = dragLocation.x;
-        test.y = dragLocation.y;
+        dispatcher.x = dragLocation.x;
+        dispatcher.y = dragLocation.y;
     }
 }
 
