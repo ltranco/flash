@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>7D2F8F7A-FEA8-43E5-87D7-353C47CF66BE</string>
+	<key>IDESourceControlProjectName</key>
+	<string>flash</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0534436CD246D427FB0AD34096F98BE98A7355A2</key>
+		<string>https://github.com/lvtr4n/flash.git</string>
+		<key>308C4830F054A2ACAFD6D7744F956948E0608273</key>
+		<string>github.com:lvtr4n/pyro.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>flash.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0534436CD246D427FB0AD34096F98BE98A7355A2</key>
+		<string>../..</string>
+		<key>308C4830F054A2ACAFD6D7744F956948E0608273</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/lvtr4n/flash.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0534436CD246D427FB0AD34096F98BE98A7355A2</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>308C4830F054A2ACAFD6D7744F956948E0608273</string>
+			<key>IDESourceControlWCCName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0534436CD246D427FB0AD34096F98BE98A7355A2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>flash</string>
+		</dict>
+	</array>
+</dict>
+</plist>
