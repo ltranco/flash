@@ -1,9 +1,9 @@
 //
 //  Play.h
-//  AppScaffold
+//  flash
 //
-//  Created by Brian Ensor on 4/15/11.
-//  Copyright 2011 Brian Ensor Apps. All rights reserved.
+//  Created by Long Tran on 6/5/15.
+//  Copyright (c) 2015 Long Tran. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -13,4 +13,5 @@
     
 }
 
+- (void) add3Pieces;
 @end

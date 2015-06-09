@@ -47,5 +47,6 @@
     Play *playScene = [[Play alloc] init];
     [mainMenu removeFromParent];
     [self addChild:playScene];
+    [playScene add3Pieces];
 }
 @end
