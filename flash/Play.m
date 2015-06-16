@@ -14,7 +14,7 @@
     SPSprite *playScene;
     
     //Pieces
-    SPQuad *piece1;
+    SPImage *piece1;
     SPImage *piece2;
     SPImage *piece3;
     
@@ -27,8 +27,8 @@
 int tileSize = 30;
 int padding = 5;
 int piecesPlaced = 0;
-float p1X = 15, p2X = 90;
-float p1Y = 350, p2Y = 350;
+float p1X = 15, p2X = 130, p3X = 225;
+float p1Y = 450, p2Y = 450, p3Y = 450;
 uint tileColor = 0xff5050;
 
 - (id)init {
@@ -74,37 +74,33 @@ uint tileColor = 0xff5050;
     return self;
 }
 -(void) add3Pieces {
-        //Piece 1
-        //piece1 = [SPQuad quadWithWidth:tileSize height:tileSize color:0xff000];
-        piece1 = [[SPImage alloc] initWithContentsOfFile:@"3x3.png"];
-        piece2 = [[SPImage alloc] initWithContentsOfFile:@"3x3.png"];
-        piece3 = [[SPImage alloc] initWithContentsOfFile:@"3x3.png"];
+    piece1 = [self createPiece:@"3x3" Width:100 Height:100 atX:p1X atY:p1Y];
+    piece2 = [self createPiece:@"2x2" Width:70 Height:70 atX:p2X atY:p2Y];
+    piece3 = [self createPiece:@"1x3" Width:100 Height:30 atX:p3X atY:p3Y];
     
-        piece1.x = p1X; piece1.y = p1Y + 100;
-        piece1.name = @"3x3";
-        piece3.name = @"3x3";
+    SPTween *tween = [SPTween tweenWithTarget:piece1
+                                         time:3.0f transition:SP_TRANSITION_LINEAR];
+    //[tween setDelay:2.0f];
+    [tween animateProperty:@"width" targetValue:110.0f];
+        [tween animateProperty:@"height" targetValue:110.0f];
+    [Sparrow.juggler addObject:tween];
+    
+    //[self.stage.juggler addObject:tween];
+    
+    //Adding children to the playscene and the playscene to the main scene
+    [playScene addChild:piece1];
+    [playScene addChild:piece2];
+    [playScene addChild:piece3];
+    [self addChild:playScene];
+}
 
-        piece1.width = 100;
-        piece1.height = 100;
-        piece3.width = 100;
-        piece3.height = 100;
-    
-        //Piece 2
-        piece2.name = @"3x3";
-        piece2.width = 100;
-        piece2.height = 100;
-        piece2.x = p2X;
-        piece2.y = p2Y + 100;
-    
-        [piece1 addEventListener:@selector(onTouch:) atObject:self forType:SP_EVENT_TYPE_TOUCH];
-        [piece2 addEventListener:@selector(onTouch:) atObject:self forType:SP_EVENT_TYPE_TOUCH];
-        [piece3 addEventListener:@selector(onTouch:) atObject:self forType:SP_EVENT_TYPE_TOUCH];
-    
-        //Adding children to the playscene and the playscene to the main scene
-        [playScene addChild:piece1];
-        [playScene addChild:piece2];
-        [playScene addChild:piece3];
-        [self addChild:playScene];
+-(SPImage*) createPiece:(NSString *)shape Width:(int)width Height:(int)height atX:(int)x atY:(int)y {
+    SPImage* p = [[SPImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@.png", shape]];
+    p.name = shape;
+    p.x = x; p.y = y;
+    p.width = width; p.height = height;
+    [p addEventListener:@selector(onTouch:) atObject:self forType:SP_EVENT_TYPE_TOUCH];
+    return p;
 }
 
 -(void) onTouch: (SPTouchEvent *) event {
@@ -161,28 +157,24 @@ uint tileColor = 0xff5050;
     }
 }
 - (void) placePiece:(NSString *)shape AtX:(int)x andAtY:(int) y {
-    int curX = x, curY = y;
-    if([shape isEqualToString:@"3x3"]) {
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++) {
-                SPQuad *tile = (SPQuad *) board[curX][curY];
-                tile.color = 0xaabbcc;
-                curX++;
-            }
-            curY++;
-            curX = x;
+    int shapeWidth = [[shape substringWithRange:NSMakeRange(0, 1)] intValue];
+    int shapeHeight = [[shape substringWithRange:NSMakeRange(2, 1)] intValue];
+    for(int i = x; i < x + shapeWidth; i++) {
+        for(int j = y; j < y + shapeHeight; j++) {
+            SPQuad *tile = (SPQuad *) board[i][j];
+            tile.color = 0xaabbcc;
         }
     }
 }
 
 - (BOOL) didShape:(NSString*)shape FitStartingAtX:(int)x andY: (int)y {
-    if([shape isEqualToString:@"3x3"] || [shape isEqualToString:@"2x2"]) {
-        for(int i = x; i < x + 3; i++) {
-            for(int j = y; j < y + 3; j++) {
-                SPQuad *tile = (SPQuad *) board[i][j];
-                if(tile.color != tileColor) {
-                    return false;
-                }
+    int shapeWidth = [[shape substringWithRange:NSMakeRange(0, 1)] intValue];
+    int shapeHeight = [[shape substringWithRange:NSMakeRange(2, 1)] intValue];
+    for(int i = x; i < x + shapeWidth; i++) {
+        for(int j = y; j < y + shapeHeight; j++) {
+            SPQuad *tile = (SPQuad *) board[i][j];
+            if(tile.color != tileColor) {
+                return false;
             }
         }
     }
@@ -203,6 +195,36 @@ uint tileColor = 0xff5050;
 
 - (BOOL) isAWin {
     return false;
+}
+
+- (void) clearRowCol {
+    NSMutableArray* rowToClear = [[NSMutableArray alloc] init];
+    NSMutableArray* colToClear = [[NSMutableArray alloc] init];
+
+    for(int i = 0; i < 10; i++) {
+        int count = 0;
+        for(int j = 0; j < 10; j++) {
+            SPQuad *tile = (SPQuad *) board[i][j];
+            if(tile.color != tileColor) {
+                count++;
+            }
+        }
+        if(count == 10) {
+            [rowToClear addObject:[NSNumber numberWithInt:i]];
+        }
+    }
+    for(int j = 0; j < 10; j++) {
+        int count = 0;
+        for(int i = 0; i < 10; i++) {
+            SPQuad *tile = (SPQuad *) board[i][j];
+            if(tile.color != tileColor) {
+                count++;
+            }
+        }
+        if(count == 10) {
+            [colToClear addObject:[NSNumber numberWithInt:j]];
+        }
+    }
 }
 
 - (void)menuButtonTriggered:(SPEvent *)event {
