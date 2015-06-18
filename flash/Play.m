@@ -73,19 +73,15 @@ uint tileColor = 0xff5050;
     }
     return self;
 }
+-(NSString*) getRandomPiece {
+    NSArray *pieces = @[@"1x2", @"1x3", @"2x1", @"2x2", @"3x3"];
+    return [pieces objectAtIndex: arc4random_uniform((int)pieces.count)];
+}
+
 -(void) add3Pieces {
-    piece1 = [self createPiece:@"3x3" Width:100 Height:100 atX:p1X atY:p1Y];
-    piece2 = [self createPiece:@"2x2" Width:70 Height:70 atX:p2X atY:p2Y];
-    piece3 = [self createPiece:@"1x3" Width:100 Height:30 atX:p3X atY:p3Y];
-    
-    SPTween *tween = [SPTween tweenWithTarget:piece1
-                                         time:3.0f transition:SP_TRANSITION_LINEAR];
-    //[tween setDelay:2.0f];
-    [tween animateProperty:@"width" targetValue:110.0f];
-        [tween animateProperty:@"height" targetValue:110.0f];
-    [Sparrow.juggler addObject:tween];
-    
-    //[self.stage.juggler addObject:tween];
+    piece1 = [self createPiece:[self getRandomPiece] atX:p1X atY:p1Y];
+    piece2 = [self createPiece:[self getRandomPiece] atX:p2X atY:p2Y];
+    piece3 = [self createPiece:[self getRandomPiece] atX:p3X atY:p3Y];
     
     //Adding children to the playscene and the playscene to the main scene
     [playScene addChild:piece1];
@@ -94,11 +90,14 @@ uint tileColor = 0xff5050;
     [self addChild:playScene];
 }
 
--(SPImage*) createPiece:(NSString *)shape Width:(int)width Height:(int)height atX:(int)x atY:(int)y {
+-(SPImage*) createPiece:(NSString *)shape atX:(int)x atY:(int)y {
+    int shapeWidth = [[shape substringWithRange:NSMakeRange(0, 1)] intValue];
+    int shapeHeight = [[shape substringWithRange:NSMakeRange(2, 1)] intValue];
     SPImage* p = [[SPImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@.png", shape]];
     p.name = shape;
     p.x = x; p.y = y;
-    p.width = width; p.height = height;
+    p.width = shapeHeight * tileSize + (shapeWidth - 1) * padding;
+    p.height = shapeWidth * tileSize + (shapeWidth - 1) * padding;
     [p addEventListener:@selector(onTouch:) atObject:self forType:SP_EVENT_TYPE_TOUCH];
     return p;
 }
@@ -182,6 +181,7 @@ uint tileColor = 0xff5050;
 }
 
 - (void) continueGame {
+    [self clearRowCol];
     if(![self isAWin]) {
         if(piecesPlaced == 3) {
             piecesPlaced = 0;
@@ -197,10 +197,17 @@ uint tileColor = 0xff5050;
     return false;
 }
 
-- (void) clearRowCol {
-    NSMutableArray* rowToClear = [[NSMutableArray alloc] init];
-    NSMutableArray* colToClear = [[NSMutableArray alloc] init];
+- (void) animateTile: (SPQuad*)tile {
+    SPTween* tween = [SPTween tweenWithTarget:tile time:0.2f transition:SP_TRANSITION_LINEAR];
+    [tween setDelay:0.5f];
+    [tween animateProperty:@"width" targetValue:50.0f];
+    [tween animateProperty:@"height" targetValue:50.0f];
+    [Sparrow.juggler addObject:tween];
+    [tween animateProperty:@"width" targetValue:30.0f];
+    [tween animateProperty:@"height" targetValue:30.0f];
+}
 
+- (void) clearRowCol {
     for(int i = 0; i < 10; i++) {
         int count = 0;
         for(int j = 0; j < 10; j++) {
@@ -210,7 +217,10 @@ uint tileColor = 0xff5050;
             }
         }
         if(count == 10) {
-            [rowToClear addObject:[NSNumber numberWithInt:i]];
+            for(int col = 0; col < 10; col++) {
+                SPQuad *tile = (SPQuad *) board[i][col];
+                tile.color = tileColor;
+            }
         }
     }
     for(int j = 0; j < 10; j++) {
@@ -222,7 +232,10 @@ uint tileColor = 0xff5050;
             }
         }
         if(count == 10) {
-            [colToClear addObject:[NSNumber numberWithInt:j]];
+            for(int row = 0; row < 10; row++) {
+                SPQuad *tile = (SPQuad *) board[row][j];
+                tile.color = tileColor;
+            }
         }
     }
 }
